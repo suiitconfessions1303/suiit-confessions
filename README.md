@@ -133,6 +133,8 @@ The application can be deployed using:
 Configure the required environment variables in the respective hosting platforms before deployment.
 For Render, `APP_URL`, `API_URL`, and `CLIENT_URL` must be complete URLs including
 `https://` in production (for example, `https://your-service.onrender.com`).
+The frontend deployment proxies `/api/*` requests to the Render backend, so verification
+links can use the frontend domain.
 
 ## 🔄 Application Workflow
 
