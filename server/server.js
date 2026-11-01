@@ -14,7 +14,9 @@ import adminRoutes from "./src/routes/adminRoutes.js";
 const app = express();
 const PORT = process.env.PORT || 5000;
 const isProduction = process.env.NODE_ENV === "production";
-const clientUrl = process.env.CLIENT_URL || "http://localhost:5173";
+const appUrl = process.env.APP_URL?.trim();
+const apiUrl = process.env.API_URL?.trim();
+const clientUrl = process.env.CLIENT_URL?.trim();
 
 // Fix for reverse proxy (e.g., Render)
 app.set("trust proxy", 1);
@@ -59,7 +61,7 @@ app.use("/api/confessions", confessionRoutes);
 app.use("/api/admin", adminRoutes);
 
 async function startServer() {
-  if (!process.env.APP_URL || !process.env.API_URL || !process.env.CLIENT_URL) {
+  if (!appUrl || !apiUrl || !clientUrl) {
     throw new Error("APP_URL, API_URL, and CLIENT_URL are required");
   }
 
@@ -79,9 +81,9 @@ async function startServer() {
   }
 
   for (const [name, value] of Object.entries({
-    APP_URL: process.env.APP_URL,
-    API_URL: process.env.API_URL,
-    CLIENT_URL: process.env.CLIENT_URL,
+    APP_URL: appUrl,
+    API_URL: apiUrl,
+    CLIENT_URL: clientUrl,
   })) {
     let parsedUrl;
 
@@ -89,6 +91,10 @@ async function startServer() {
       parsedUrl = new URL(value);
     } catch {
       throw new Error(`${name} must be a valid URL`);
+    }
+
+    if (!["http:", "https:"].includes(parsedUrl.protocol)) {
+      throw new Error(`${name} must use http:// or https://`);
     }
 
     if (isProduction && parsedUrl.protocol !== "https:") {

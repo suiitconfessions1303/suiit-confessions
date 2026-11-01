@@ -131,6 +131,8 @@ The application can be deployed using:
 | Google SMTP | Email verification |
 
 Configure the required environment variables in the respective hosting platforms before deployment.
+For Render, `APP_URL`, `API_URL`, and `CLIENT_URL` must be complete URLs including
+`https://` in production (for example, `https://your-service.onrender.com`).
 
 ## 🔄 Application Workflow
 
@@ -163,4 +165,3 @@ Developed with ❤️ for the students of **SUIIT**.
 ---
 
 *Share your thoughts. Express your feelings. Stay anonymous.*
-
