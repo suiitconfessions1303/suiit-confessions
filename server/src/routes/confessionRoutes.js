@@ -6,7 +6,6 @@ import { UAParser } from "ua-parser-js";
 
 import SubmissionSession from "../../models/SubmissionSession.js";
 import Confession from "../../models/Confession.js";
-import { sendAdminNotification } from "../services/emailService.js";
 
 const router = Router();
 
