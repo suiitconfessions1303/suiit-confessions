@@ -1,0 +1,257 @@
+
+.admin-page {
+  min-height: 100vh;
+  padding: 36px 20px;
+  color: #f5f3ff;
+  background:
+    radial-gradient(ellipse at top, #30204a 0%, transparent 55%),
+    #100d18;
+  font-family: Inter, system-ui, sans-serif;
+}
+
+.admin-login {
+  width: 100%;
+  max-width: 420px;
+  margin: 8vh auto;
+  padding: 32px;
+  border: 1px solid #3d3151;
+  border-radius: 20px;
+  background: rgba(30, 23, 43, 0.94);
+  box-shadow: 0 20px 60px #0004;
+}
+
+.admin-symbol {
+  display: grid;
+  width: 52px;
+  height: 52px;
+  place-items: center;
+  border-radius: 16px;
+  background: #6d28d9;
+  font-weight: 800;
+  margin-bottom: 20px;
+}
+
+.admin-eyebrow {
+  color: #c4a7ff;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.admin-page h1 {
+  margin: 8px 0;
+  font-size: clamp(26px, 4vw, 36px);
+}
+
+.admin-subtitle {
+  color: #b8afc6;
+  line-height: 1.6;
+}
+
+.admin-login form {
+  display: grid;
+  gap: 10px;
+  margin-top: 28px;
+}
+
+.admin-login label {
+  margin-top: 8px;
+  font-size: 14px;
+}
+
+.admin-login input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 13px 14px;
+  color: #fff;
+  background: #171220;
+  border: 1px solid #49395d;
+  border-radius: 10px;
+  outline: none;
+}
+
+.admin-login input:focus {
+  border-color: #a78bfa;
+}
+
+.admin-primary,
+.admin-logout,
+.admin-refresh,
+.admin-delete {
+  padding: 11px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.admin-primary {
+  margin-top: 14px;
+  border: 0;
+  color: white;
+  background: #7c3aed;
+}
+
+.admin-primary:disabled,
+.admin-delete:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.admin-header {
+  max-width: 1000px;
+  margin: 0 auto 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.admin-logout,
+.admin-refresh {
+  color: #eee7ff;
+  background: #292036;
+  border: 1px solid #49395d;
+}
+
+.admin-stat {
+  max-width: 1000px;
+  margin: 0 auto 32px;
+  padding: 22px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #443455;
+  border-radius: 16px;
+  background: #21192d;
+}
+
+.admin-stat span {
+  color: #c4b8d3;
+}
+
+.admin-stat strong {
+  font-size: 32px;
+}
+
+.admin-list {
+  max-width: 1000px;
+  margin: auto;
+}
+
+.admin-list-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.admin-list-heading h2 {
+  font-size: 21px;
+}
+
+.confession-card,
+.admin-empty {
+  margin-bottom: 16px;
+  padding: 22px;
+  border: 1px solid #3d3151;
+  border-radius: 16px;
+  background: #1d1727;
+  overflow-wrap: anywhere;
+}
+
+.confession-card-top {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 10px;
+  color: #b8afc6;
+  font-size: 12px;
+}
+
+.confession-badge {
+  padding: 5px 10px;
+  border-radius: 20px;
+  color: #d8c8ff;
+  background: #392654;
+}
+
+.confession-message {
+  margin: 22px 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  line-height: 1.8;
+}
+
+.confession-details {
+  padding-top: 14px;
+  border-top: 1px solid #3d3151;
+  color: #c9bfd5;
+  font-size: 13px;
+}
+
+.confession-details summary {
+  cursor: pointer;
+  color: #d7c5ff;
+  font-weight: 600;
+}
+
+.confession-details p {
+  line-height: 1.6;
+}
+
+.admin-user-agent {
+  overflow-wrap: anywhere;
+}
+
+.confession-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 18px;
+}
+
+.admin-delete {
+  color: #fecaca;
+  background: #3a1d29;
+  border: 1px solid #743044;
+}
+
+.admin-error {
+  color: #fca5a5;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.admin-empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: #b8afc6;
+}
+
+.admin-loading {
+  text-align: center;
+  margin-top: 15vh;
+}
+
+@media (max-width: 600px) {
+  .admin-page {
+    padding: 24px 14px;
+  }
+
+  .admin-login {
+    box-sizing: border-box;
+    padding: 24px;
+  }
+
+  .admin-header {
+    align-items: flex-start;
+  }
+
+  .admin-logout {
+    flex-shrink: 0;
+  }
+
+  .confession-card {
+    padding: 16px;
+  }
+}
