@@ -12,7 +12,7 @@ import TopBar from "./AdminDashboard/components/TopBar";
 
 const ADMIN = {
   username: "confessions_admin",
-  password: "Thankyou@123",
+  password: import.meta.env.VITE_ADMIN_PASSWORD,
 };
 
 function DetailRow({ label, children }) {
