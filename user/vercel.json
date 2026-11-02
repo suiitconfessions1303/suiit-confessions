@@ -3,6 +3,10 @@
     {
       "source": "/api/:path*",
       "destination": "https://suiit-confessions-pis5.onrender.com/api/:path*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
