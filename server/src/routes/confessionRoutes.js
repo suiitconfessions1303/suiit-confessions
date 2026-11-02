@@ -1,4 +1,3 @@
-
 import { Router } from "express";
 import { createHash } from "node:crypto";
 import rateLimit from "express-rate-limit";
@@ -45,12 +44,13 @@ function getDeviceMetadata(req) {
   };
 }
 
-// Confirm that the temporary submission session is still usable without consuming it.
-router.get("/session", async (req, res) => {
-  const rawToken = req.cookies?.submission_session;
+// Exchange the redirect handoff token for the normal HTTP-only session cookie.
+router.post("/session/activate", async (req, res) => {
+  const rawToken =
+    typeof req.body?.token === "string" ? req.body.token : "";
 
-  if (!rawToken || !/^[a-f0-9]{64}$/.test(rawToken)) {
-    return res.status(200).json({ active: false });
+  if (!/^[a-f0-9]{64}$/.test(rawToken)) {
+    return res.status(401).json({ active: false });
   }
 
   const session = await SubmissionSession.findOne({
@@ -60,26 +60,66 @@ router.get("/session", async (req, res) => {
   });
 
   if (!session) {
-    clearSubmissionCookie(res);
-    return res.status(200).json({ active: false });
+    return res.status(401).json({ active: false });
   }
+
+  res.cookie("submission_session", rawToken, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    maxAge: 120 * 1000,
+    path: "/",
+  });
 
   return res.status(200).json({ active: true });
 });
 
-// Submit exactly one confession using a valid 2-minute session.
+// Check whether the temporary submission session is still active.
+router.get("/session", async (req, res) => {
+  try {
+    const rawToken = req.cookies?.submission_session;
+
+    if (!rawToken || !/^[a-f0-9]{64}$/.test(rawToken)) {
+      return res.status(200).json({ active: false });
+    }
+
+    const session = await SubmissionSession.findOne({
+      tokenHash: hashToken(rawToken),
+      consumedAt: null,
+      expiresAt: { $gt: new Date() },
+    });
+
+    if (!session) {
+      clearSubmissionCookie(res);
+      return res.status(200).json({ active: false });
+    }
+
+    return res.status(200).json({ active: true });
+  } catch (error) {
+    console.error("Session check failed:", error.message);
+
+    return res.status(500).json({
+      message: "Unable to check your session.",
+    });
+  }
+});
+
+// Submit one confession using a valid temporary session.
 router.post("/", submissionLimiter, async (req, res) => {
   const rawToken = req.cookies?.submission_session;
 
   if (!rawToken || !/^[a-f0-9]{64}$/.test(rawToken)) {
     clearSubmissionCookie(res);
+
     return res.status(401).json({
       message: "Your session is missing. Please verify your email again.",
     });
   }
 
   const message =
-    typeof req.body.message === "string" ? req.body.message.trim() : "";
+    typeof req.body?.message === "string"
+      ? req.body.message.trim()
+      : "";
 
   if (!message || message.length > 5000) {
     return res.status(400).json({
@@ -91,16 +131,19 @@ router.post("/", submissionLimiter, async (req, res) => {
     const tokenHash = hashToken(rawToken);
     const now = new Date();
 
-    // Atomically consume the session before saving.
-    // Concurrent requests cannot both use the same session.
+    // Atomically consume the session to prevent duplicate submissions.
     const session = await SubmissionSession.findOneAndUpdate(
       {
         tokenHash,
         consumedAt: null,
         expiresAt: { $gt: now },
       },
-      { $set: { consumedAt: now } },
-      { returnDocument: "after" }
+      {
+        $set: { consumedAt: now },
+      },
+      {
+        returnDocument: "after",
+      }
     );
 
     if (!session) {
@@ -112,32 +155,19 @@ router.post("/", submissionLimiter, async (req, res) => {
       });
     }
 
-    let confession;
-
     try {
-      confession = await Confession.create({
+      await Confession.create({
         email: session.email,
         message,
         submittedAt: now,
         metadata: getDeviceMetadata(req),
       });
     } catch (saveError) {
-      // Do not make a consumed session reusable after an uncertain save.
       clearSubmissionCookie(res);
       throw saveError;
     }
 
     clearSubmissionCookie(res);
-
-    // Notification failure must not undo a successful submission.
-    try {
-      await sendAdminNotification(confession);
-    } catch (emailError) {
-      console.error(
-        "Confession saved, but admin notification failed:",
-        emailError.message
-      );
-    }
 
     return res.status(201).json({
       message: "Your confession has been submitted successfully.",
@@ -152,7 +182,7 @@ router.post("/", submissionLimiter, async (req, res) => {
   }
 });
 
-// Explicitly invalidate the temporary session when the user exits.
+// Explicitly close the temporary session when the user exits.
 router.post("/finish", async (req, res) => {
   try {
     const rawToken = req.cookies?.submission_session;
@@ -163,7 +193,9 @@ router.post("/finish", async (req, res) => {
           tokenHash: hashToken(rawToken),
           consumedAt: null,
         },
-        { $set: { consumedAt: new Date() } }
+        {
+          $set: { consumedAt: new Date() },
+        }
       );
     }
 
@@ -174,6 +206,7 @@ router.post("/finish", async (req, res) => {
     });
   } catch (error) {
     console.error("Session cleanup failed:", error.message);
+
     clearSubmissionCookie(res);
 
     return res.status(500).json({

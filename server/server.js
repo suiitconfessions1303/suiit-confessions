@@ -12,13 +12,14 @@ import confessionRoutes from "./src/routes/confessionRoutes.js";
 import adminRoutes from "./src/routes/adminRoutes.js";
 
 const app = express();
+
 const PORT = process.env.PORT || 5000;
 const isProduction = process.env.NODE_ENV === "production";
+
 const appUrl = process.env.APP_URL?.trim();
 const apiUrl = process.env.API_URL?.trim();
 const clientUrl = process.env.CLIENT_URL?.trim();
 
-// Fix for reverse proxy (e.g., Render)
 app.set("trust proxy", 1);
 app.disable("x-powered-by");
 
@@ -37,9 +38,12 @@ app.use(
     limit: 300,
     standardHeaders: true,
     legacyHeaders: false,
-    message: { message: "Too many requests. Please try again later." },
+    message: {
+      message: "Too many requests. Please try again later.",
+    },
   })
 );
+
 app.use(express.json({ limit: "10kb", strict: true }));
 app.use(cookieParser());
 
@@ -70,13 +74,10 @@ async function startServer() {
     (!process.env.JWT_SECRET ||
       process.env.JWT_SECRET.length < 32 ||
       !process.env.ADMIN_USERNAME ||
-      !process.env.ADMIN_PASSWORD_HASH ||
-      !process.env.GMAIL_USER ||
-      !process.env.GMAIL_APP_PASSWORD ||
-      !process.env.ADMIN_EMAIL)
+      !process.env.ADMIN_PASSWORD_HASH)
   ) {
     throw new Error(
-      "Production authentication and email secrets must be configured"
+      "Production authentication secrets must be configured"
     );
   }
 
@@ -94,7 +95,7 @@ async function startServer() {
     }
 
     if (!["http:", "https:"].includes(parsedUrl.protocol)) {
-      throw new Error(`${name} must use http:// or https://`);
+      throw new Error(`${name} must use HTTP or HTTPS`);
     }
 
     if (isProduction && parsedUrl.protocol !== "https:") {

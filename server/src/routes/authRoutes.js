@@ -8,7 +8,8 @@ import { sendVerificationEmail } from "../services/emailService.js";
 
 const router = Router();
 
-const hashToken = (token) => createHash("sha256").update(token).digest("hex");
+const hashToken = (token) =>
+  createHash("sha256").update(token).digest("hex");
 
 const requestLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -22,21 +23,16 @@ const requestLimiter = rateLimit({
 
 router.post("/request-verification", requestLimiter, async (req, res) => {
   try {
-    const email = String(req.body.email || "")
+    const email = String(req.body?.email || "")
       .trim()
       .toLowerCase();
 
+    // Only allow institutional email addresses.
     const allowedEmail = /^[^\s@]+@suiit\.ac\.in$/;
 
-    if (!allowedEmail.test(email) || email.length > 254) {
+    if (email.length > 254 || !allowedEmail.test(email)) {
       return res.status(400).json({
-        message: "Only email addresses ending with @suiit.ac.in are allowed.",
-      });
-    }
-
-    if (email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      return res.status(400).json({
-        message: "Please provide a valid email address.",
+        message: "Only valid @suiit.ac.in email addresses are allowed.",
       });
     }
 
@@ -60,6 +56,7 @@ router.post("/request-verification", requestLimiter, async (req, res) => {
       await EmailVerification.deleteOne({
         tokenHash: hashToken(rawToken),
       });
+
       throw error;
     }
 
@@ -78,21 +75,26 @@ router.post("/request-verification", requestLimiter, async (req, res) => {
 
 router.get("/verify", async (req, res) => {
   try {
-    const token = typeof req.query.token === "string" ? req.query.token : "";
+    const token =
+      typeof req.query.token === "string" ? req.query.token : "";
 
     if (!/^[a-f0-9]{64}$/.test(token)) {
       return res.status(400).send("Invalid verification link.");
     }
 
-    // Atomically consume the token, so it cannot be used twice.
+    // Atomically consume the verification token.
     const verification = await EmailVerification.findOneAndUpdate(
       {
         tokenHash: hashToken(token),
         usedAt: null,
         expiresAt: { $gt: new Date() },
       },
-      { $set: { usedAt: new Date() } },
-      { returnDocument: "after" },
+      {
+        $set: { usedAt: new Date() },
+      },
+      {
+        returnDocument: "after",
+      }
     );
 
     if (!verification) {
@@ -118,7 +120,11 @@ router.get("/verify", async (req, res) => {
       path: "/",
     });
 
-    return res.redirect(`${process.env.APP_URL}/confess`);
+    const frontendUrl = process.env.APP_URL.replace(/\/+$/, "");
+
+    return res.redirect(
+      `${frontendUrl}/confess#session=${encodeURIComponent(rawSessionToken)}`
+    );
   } catch (error) {
     console.error("Email verification failed:", error.message);
 
