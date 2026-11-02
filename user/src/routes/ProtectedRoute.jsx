@@ -71,34 +71,19 @@ function RouteLoading() {
 
 export function SubmissionRoute({ children }) {
   const [allowed, setAllowed] = useState(null);
-  const location = useLocation();
-  const navigate = useNavigate();
 
   useEffect(() => {
     let active = true;
-    const handoffToken = new URLSearchParams(location.hash.slice(1)).get("session");
 
-    const sessionCheck = handoffToken
-      ? api.post("/confessions/session/activate", { token: handoffToken })
-      : api.get("/confessions/session");
-
-    sessionCheck
-      .then((response) => {
-        if (!active) return;
-
-        const sessionActive = response.data.active === true;
-        setAllowed(sessionActive);
-
-        if (handoffToken && sessionActive) {
-          navigate("/confess", { replace: true });
-        }
-      })
+    api
+      .get("/confessions/session")
+      .then((response) => active && setAllowed(response.data.active === true))
       .catch(() => active && setAllowed(false));
 
     return () => {
       active = false;
     };
-  }, [location.hash, navigate]);
+  }, []);
 
   if (allowed === null) return <RouteLoading />;
   return allowed ? (

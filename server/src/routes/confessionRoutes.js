@@ -45,36 +45,6 @@ function getDeviceMetadata(req) {
   };
 }
 
-// Exchange the redirect handoff token for the normal HTTP-only session cookie.
-router.post("/session/activate", async (req, res) => {
-  const rawToken =
-    typeof req.body?.token === "string" ? req.body.token : "";
-
-  if (!/^[a-f0-9]{64}$/.test(rawToken)) {
-    return res.status(401).json({ active: false });
-  }
-
-  const session = await SubmissionSession.findOne({
-    tokenHash: hashToken(rawToken),
-    consumedAt: null,
-    expiresAt: { $gt: new Date() },
-  });
-
-  if (!session) {
-    return res.status(401).json({ active: false });
-  }
-
-  res.cookie("submission_session", rawToken, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    maxAge: 120 * 1000,
-    path: "/",
-  });
-
-  return res.status(200).json({ active: true });
-});
-
 // Confirm that the temporary submission session is still usable without consuming it.
 router.get("/session", async (req, res) => {
   const rawToken = req.cookies?.submission_session;

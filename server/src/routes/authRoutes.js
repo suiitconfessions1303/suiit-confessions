@@ -118,9 +118,7 @@ router.get("/verify", async (req, res) => {
       path: "/",
     });
 
-    return res.redirect(
-      `${process.env.APP_URL}/confess#session=${encodeURIComponent(rawSessionToken)}`
-    );
+    return res.redirect(`${process.env.APP_URL}/confess`);
   } catch (error) {
     console.error("Email verification failed:", error.message);
 
