@@ -1,11 +1,5 @@
 import nodemailer from "nodemailer";
 
-console.log("SMTP configuration check:", {
-  gmailUserExists: Boolean(process.env.GMAIL_USER),
-  gmailPasswordExists: Boolean(process.env.GMAIL_APP_PASSWORD),
-  gmailUserLength: process.env.GMAIL_USER?.length || 0,
-  gmailPasswordLength: process.env.GMAIL_APP_PASSWORD?.length || 0,
-});
 
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
