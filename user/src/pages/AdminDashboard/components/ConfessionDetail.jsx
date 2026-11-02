@@ -8,8 +8,16 @@ import { downloadConfessionCards } from "../downloadConfession";
 function Field({ label, value, wide = false }) {
   return (
     <Box sx={{ gridColumn: wide ? "1 / -1" : "auto", minWidth: 0 }}>
-      <Typography sx={{ color: colors.muted, fontSize: "12px", mb: 0.25 }}>{label}</Typography>
-      <Typography sx={{ color: colors.textSoft, fontSize: "13px", overflowWrap: "anywhere" }}>
+      <Typography sx={{ color: colors.muted, fontSize: "12px", mb: 0.25 }}>
+        {label}
+      </Typography>
+      <Typography
+        sx={{
+          color: colors.textSoft,
+          fontSize: "13px",
+          overflowWrap: "anywhere",
+        }}
+      >
         {value}
       </Typography>
     </Box>
@@ -34,7 +42,14 @@ export default function ConfessionDetail({ item, busy, onDelete, onClose }) {
   }
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", minHeight: 0, width: "100%" }}>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        minHeight: 0,
+        width: "100%",
+      }}
+    >
       {/* Header */}
       <Box
         sx={{
@@ -56,7 +71,10 @@ export default function ConfessionDetail({ item, busy, onDelete, onClose }) {
           <Typography variant="h2" component="h2">
             Confession
           </Typography>
-          <Typography component="time" sx={{ color: colors.muted, fontSize: "12px" }}>
+          <Typography
+            component="time"
+            sx={{ color: colors.muted, fontSize: "12px" }}
+          >
             {formatDateTime(item.submittedAt)}
           </Typography>
         </Box>
@@ -105,7 +123,15 @@ export default function ConfessionDetail({ item, busy, onDelete, onClose }) {
           </Typography>
         </Box>
 
-        <Typography sx={{ mt: 4, mb: 2, color: colors.text, fontSize: "14px", fontWeight: 700 }}>
+        <Typography
+          sx={{
+            mt: 4,
+            mb: 2,
+            color: colors.text,
+            fontSize: "14px",
+            fontWeight: 700,
+          }}
+        >
           Submission details
         </Typography>
 
@@ -116,7 +142,11 @@ export default function ConfessionDetail({ item, busy, onDelete, onClose }) {
             gap: 2.5,
           }}
         >
-          <Field label="Verified email" value={item.email || "Unavailable"} wide />
+          <Field
+            label="Verified email"
+            value={item.email || "Unavailable"}
+            wide
+          />
           <Field
             label="Browser"
             value={`${meta.browserName || "Unknown"} ${meta.browserVersion || ""}`.trim()}
@@ -127,7 +157,11 @@ export default function ConfessionDetail({ item, busy, onDelete, onClose }) {
           />
           <Field label="Device" value={meta.deviceType || "Unknown"} />
           <Field label="Submission ID" value={item._id} />
-          <Field label="User agent" value={meta.userAgent || "Unavailable"} wide />
+          <Field
+            label="User agent"
+            value={meta.userAgent || "Unavailable"}
+            wide
+          />
         </Box>
       </Box>
 
@@ -150,7 +184,10 @@ export default function ConfessionDetail({ item, busy, onDelete, onClose }) {
         }}
       >
         {downloadError && (
-          <Typography role="alert" sx={{ mr: "auto", color: colors.danger, fontSize: "12px" }}>
+          <Typography
+            role="alert"
+            sx={{ mr: "auto", color: colors.danger, fontSize: "12px" }}
+          >
             {downloadError}
           </Typography>
         )}
@@ -164,13 +201,22 @@ export default function ConfessionDetail({ item, busy, onDelete, onClose }) {
             color: "#170e26",
             boxShadow: "none",
             "&:hover": { backgroundColor: "#c0adff", boxShadow: "none" },
-            "&.Mui-disabled": { backgroundColor: colors.accent, color: "#170e26", opacity: 0.5 },
+            "&.Mui-disabled": {
+              backgroundColor: colors.accent,
+              color: "#170e26",
+              opacity: 0.5,
+            },
           }}
         >
           {downloading ? "Preparing..." : "Download card"}
         </Button>
 
-        <Button variant="outlined" color="error" disabled={busy} onClick={() => onDelete(item._id)}>
+        <Button
+          variant="outlined"
+          color="error"
+          disabled={busy}
+          onClick={() => onDelete(item._id)}
+        >
           {busy ? "Deleting..." : "Delete confession"}
         </Button>
       </Box>

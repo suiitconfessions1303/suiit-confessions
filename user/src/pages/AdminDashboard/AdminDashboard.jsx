@@ -41,7 +41,9 @@ function Dashboard() {
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     load()
-      .catch((err) => setError(err.response?.data?.message || "Unable to load confessions."))
+      .catch((err) =>
+        setError(err.response?.data?.message || "Unable to load confessions."),
+      )
       .finally(() => setLoading(false));
   }, [load]);
 
@@ -49,7 +51,11 @@ function Dashboard() {
     setLoading(true);
     setError("");
     load()
-      .catch((err) => setError(err.response?.data?.message || "Unable to refresh confessions."))
+      .catch((err) =>
+        setError(
+          err.response?.data?.message || "Unable to refresh confessions.",
+        ),
+      )
       .finally(() => setLoading(false));
   }
 
@@ -109,24 +115,34 @@ function Dashboard() {
   }
 
   return (
-    <Box sx={{ display: "flex", minHeight: "100vh", background: pageBackground }}>
+    <Box
+      sx={{ display: "flex", minHeight: "100vh", background: pageBackground }}
+    >
       <Sidebar onLogout={handleLogout} />
 
       <Box sx={{ flexGrow: 1, minWidth: 0 }}>
         <TopBar onLogout={handleLogout} />
 
-        <Box component="main" sx={{ p: { xs: 2, sm: 3, lg: 5 }, maxWidth: 1280, mx: "auto" }}>
+        <Box
+          component="main"
+          sx={{ p: { xs: 2, sm: 3, lg: 5 }, maxWidth: 1280, mx: "auto" }}
+        >
           <Stack spacing={3}>
             <Stack
               direction={{ xs: "column", sm: "row" }}
               spacing={2}
-              sx={{ justifyContent: "space-between", alignItems: { sm: "center" } }}
+              sx={{
+                justifyContent: "space-between",
+                alignItems: { sm: "center" },
+              }}
             >
               <Box>
                 <Typography variant="h1" component="h1">
                   Confession inbox
                 </Typography>
-                <Typography sx={{ mt: 0.75, color: "#b5adbf", fontSize: "14px" }}>
+                <Typography
+                  sx={{ mt: 0.75, color: "#b5adbf", fontSize: "14px" }}
+                >
                   Read and manage student submissions privately.
                 </Typography>
               </Box>
@@ -168,12 +184,12 @@ function Dashboard() {
                 text="Checking for new student submissions."
               />
             ) : confessions.length === 0 ? (
-              <EmptyState title="No confessions yet" text="New submissions will appear here." />
-            ) : (
-              <ConfessionList
-                items={visible}
-                onSelect={handleSelect}
+              <EmptyState
+                title="No confessions yet"
+                text="New submissions will appear here."
               />
+            ) : (
+              <ConfessionList items={visible} onSelect={handleSelect} />
             )}
           </Stack>
         </Box>

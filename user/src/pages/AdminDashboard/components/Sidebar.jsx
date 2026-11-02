@@ -44,10 +44,14 @@ export default function Sidebar({ onLogout }) {
           }}
         />
         <Box>
-          <Typography sx={{ fontWeight: 700, fontSize: "15px", color: colors.text }}>
+          <Typography
+            sx={{ fontWeight: 700, fontSize: "15px", color: colors.text }}
+          >
             SUIIT Confessions
           </Typography>
-          <Typography sx={{ fontSize: "12px", color: colors.muted }}>Admin Panel</Typography>
+          <Typography sx={{ fontSize: "12px", color: colors.muted }}>
+            Admin Panel
+          </Typography>
         </Box>
       </Stack>
 
@@ -71,7 +75,10 @@ export default function Sidebar({ onLogout }) {
               borderRadius: "10px",
               color: colors.muted,
               textDecoration: "none",
-              "&:hover": { color: colors.text, backgroundColor: colors.surfaceDeep },
+              "&:hover": {
+                color: colors.text,
+                backgroundColor: colors.surfaceDeep,
+              },
               "&.active": {
                 color: colors.accentSoft,
                 backgroundColor: colors.accentBg,
@@ -79,7 +86,10 @@ export default function Sidebar({ onLogout }) {
             }}
           >
             <Icon fontSize="small" />
-            <Typography component="span" sx={{ fontWeight: 700, fontSize: "14px" }}>
+            <Typography
+              component="span"
+              sx={{ fontWeight: 700, fontSize: "14px" }}
+            >
               {label}
             </Typography>
           </Box>

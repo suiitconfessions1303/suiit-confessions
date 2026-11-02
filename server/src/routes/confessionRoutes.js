@@ -8,8 +8,7 @@ import Confession from "../../models/Confession.js";
 
 const router = Router();
 
-const hashToken = (token) =>
-  createHash("sha256").update(token).digest("hex");
+const hashToken = (token) => createHash("sha256").update(token).digest("hex");
 
 const submissionLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -46,8 +45,7 @@ function getDeviceMetadata(req) {
 
 // Exchange the redirect handoff token for the normal HTTP-only session cookie.
 router.post("/session/activate", async (req, res) => {
-  const rawToken =
-    typeof req.body?.token === "string" ? req.body.token : "";
+  const rawToken = typeof req.body?.token === "string" ? req.body.token : "";
 
   if (!/^[a-f0-9]{64}$/.test(rawToken)) {
     return res.status(401).json({ active: false });
@@ -117,9 +115,7 @@ router.post("/", submissionLimiter, async (req, res) => {
   }
 
   const message =
-    typeof req.body?.message === "string"
-      ? req.body.message.trim()
-      : "";
+    typeof req.body?.message === "string" ? req.body.message.trim() : "";
 
   if (!message || message.length > 5000) {
     return res.status(400).json({
@@ -143,7 +139,7 @@ router.post("/", submissionLimiter, async (req, res) => {
       },
       {
         returnDocument: "after",
-      }
+      },
     );
 
     if (!session) {
@@ -195,7 +191,7 @@ router.post("/finish", async (req, res) => {
         },
         {
           $set: { consumedAt: new Date() },
-        }
+        },
       );
     }
 

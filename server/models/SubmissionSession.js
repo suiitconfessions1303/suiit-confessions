@@ -1,4 +1,3 @@
-
 import mongoose from "mongoose";
 
 const submissionSessionSchema = new mongoose.Schema(
@@ -24,10 +23,7 @@ const submissionSessionSchema = new mongoose.Schema(
       default: null,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
-export default mongoose.model(
-  "SubmissionSession",
-  submissionSessionSchema
-);
+export default mongoose.model("SubmissionSession", submissionSessionSchema);

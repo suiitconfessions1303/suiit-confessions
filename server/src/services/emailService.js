@@ -42,8 +42,7 @@ export async function sendVerificationEmail(email, token) {
 
   if (!response.ok) {
     throw new Error(
-      result.message ||
-        `Email service failed with status ${response.status}`
+      result.message || `Email service failed with status ${response.status}`,
     );
   }
 

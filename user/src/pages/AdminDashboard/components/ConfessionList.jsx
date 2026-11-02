@@ -20,7 +20,11 @@ export default function ConfessionList({ items, onSelect }) {
       }}
     >
       {items.map((item, index) => (
-        <Box component="li" key={item._id} sx={{ display: "flex", minWidth: 0 }}>
+        <Box
+          component="li"
+          key={item._id}
+          sx={{ display: "flex", minWidth: 0 }}
+        >
           <ConfessionListItem
             item={item}
             number={items.length - index}

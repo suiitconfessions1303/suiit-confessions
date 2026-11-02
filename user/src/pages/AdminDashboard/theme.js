@@ -64,12 +64,17 @@ const theme = createTheme({
         outlinedError: {
           borderColor: colors.dangerLine,
           color: colors.danger,
-          "&:hover": { borderColor: "#9d4d5c", backgroundColor: colors.dangerBg },
+          "&:hover": {
+            borderColor: "#9d4d5c",
+            backgroundColor: colors.dangerBg,
+          },
         },
       },
     },
     MuiDrawer: {
-      styleOverrides: { paper: { backgroundImage: "none", backgroundColor: colors.surface } },
+      styleOverrides: {
+        paper: { backgroundImage: "none", backgroundColor: colors.surface },
+      },
     },
     MuiDialog: {
       styleOverrides: {

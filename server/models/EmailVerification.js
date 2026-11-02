@@ -1,4 +1,3 @@
-
 import mongoose from "mongoose";
 
 const emailVerificationSchema = new mongoose.Schema(
@@ -25,10 +24,7 @@ const emailVerificationSchema = new mongoose.Schema(
       default: null,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
-export default mongoose.model(
-  "EmailVerification",
-  emailVerificationSchema
-);
+export default mongoose.model("EmailVerification", emailVerificationSchema);

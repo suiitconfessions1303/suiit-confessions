@@ -1,4 +1,3 @@
-
 import { Router } from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
@@ -59,21 +58,22 @@ router.post("/login", loginLimiter, async (req, res) => {
       });
     }
 
-    if (typeof username !== "string" ||
-        typeof password !== "string" ||
-        username.length > 100 ||
-        password.length > 200) {
+    if (
+      typeof username !== "string" ||
+      typeof password !== "string" ||
+      username.length > 100 ||
+      password.length > 200
+    ) {
       return res.status(400).json({
         message: "Invalid username or password.",
       });
     }
 
-    const usernameMatches =
-      username === process.env.ADMIN_USERNAME;
+    const usernameMatches = username === process.env.ADMIN_USERNAME;
 
     const passwordMatches = await bcrypt.compare(
       password,
-      process.env.ADMIN_PASSWORD_HASH
+      process.env.ADMIN_PASSWORD_HASH,
     );
 
     if (!usernameMatches || !passwordMatches) {
@@ -82,11 +82,9 @@ router.post("/login", loginLimiter, async (req, res) => {
       });
     }
 
-    const token = jwt.sign(
-      { role: "admin" },
-      process.env.JWT_SECRET,
-      { expiresIn: "2h" }
-    );
+    const token = jwt.sign({ role: "admin" }, process.env.JWT_SECRET, {
+      expiresIn: "2h",
+    });
 
     res.cookie("admin_session", token, {
       ...cookieOptions,
@@ -123,35 +121,29 @@ router.get("/confessions", requireAdmin, async (req, res) => {
 });
 
 // Delete one confession (protected)
-router.delete(
-  "/confessions/:id",
-  requireAdmin,
-  async (req, res) => {
-    try {
-      if (!mongoose.isValidObjectId(req.params.id)) {
-        return res.status(400).json({
-          message: "Invalid confession ID.",
-        });
-      }
-
-      const deleted = await Confession.findByIdAndDelete(
-        req.params.id
-      );
-
-      if (!deleted) {
-        return res.status(404).json({
-          message: "Confession not found.",
-        });
-      }
-
-      return res.json({ message: "Confession deleted." });
-    } catch (error) {
-      console.error("Delete failed:", error.message);
-      return res.status(500).json({
-        message: "Unable to delete confession.",
+router.delete("/confessions/:id", requireAdmin, async (req, res) => {
+  try {
+    if (!mongoose.isValidObjectId(req.params.id)) {
+      return res.status(400).json({
+        message: "Invalid confession ID.",
       });
     }
+
+    const deleted = await Confession.findByIdAndDelete(req.params.id);
+
+    if (!deleted) {
+      return res.status(404).json({
+        message: "Confession not found.",
+      });
+    }
+
+    return res.json({ message: "Confession deleted." });
+  } catch (error) {
+    console.error("Delete failed:", error.message);
+    return res.status(500).json({
+      message: "Unable to delete confession.",
+    });
   }
-);
+});
 
 export default router;

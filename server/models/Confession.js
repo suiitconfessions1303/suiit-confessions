@@ -1,4 +1,3 @@
-
 import mongoose from "mongoose";
 
 const confessionSchema = new mongoose.Schema(
@@ -29,7 +28,7 @@ const confessionSchema = new mongoose.Schema(
       deviceType: { type: String, default: "" },
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 export default mongoose.model("Confession", confessionSchema);

@@ -1,6 +1,5 @@
 import nodemailer from "nodemailer";
 
-
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
   port: 587,
@@ -19,10 +18,7 @@ export default async function handler(req, res) {
   const expectedSecret = process.env.EMAIL_API_SECRET;
   const suppliedSecret = req.headers.authorization;
 
-  if (
-    !expectedSecret ||
-    suppliedSecret !== `Bearer ${expectedSecret}`
-  ) {
+  if (!expectedSecret || suppliedSecret !== `Bearer ${expectedSecret}`) {
     return res.status(401).json({ message: "Unauthorized." });
   }
 

@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import api from "../api";
 
-
 import { Box, CircularProgress, Paper, Typography } from "@mui/material";
 
 function RouteLoading() {
@@ -68,7 +67,6 @@ function RouteLoading() {
   );
 }
 
-
 export function SubmissionRoute({ children }) {
   const [allowed, setAllowed] = useState(null);
   const location = useLocation();
@@ -76,7 +74,9 @@ export function SubmissionRoute({ children }) {
 
   useEffect(() => {
     let active = true;
-    const handoffToken = new URLSearchParams(location.hash.slice(1)).get("session");
+    const handoffToken = new URLSearchParams(location.hash.slice(1)).get(
+      "session",
+    );
 
     const sessionCheck = handoffToken
       ? api.post("/confessions/session/activate", { token: handoffToken })

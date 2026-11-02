@@ -29,7 +29,7 @@ app.use(
   cors({
     origin: clientUrl,
     credentials: true,
-  })
+  }),
 );
 
 app.use(
@@ -41,7 +41,7 @@ app.use(
     message: {
       message: "Too many requests. Please try again later.",
     },
-  })
+  }),
 );
 
 app.use(express.json({ limit: "10kb", strict: true }));
@@ -76,9 +76,7 @@ async function startServer() {
       !process.env.ADMIN_USERNAME ||
       !process.env.ADMIN_PASSWORD_HASH)
   ) {
-    throw new Error(
-      "Production authentication secrets must be configured"
-    );
+    throw new Error("Production authentication secrets must be configured");
   }
 
   for (const [name, value] of Object.entries({

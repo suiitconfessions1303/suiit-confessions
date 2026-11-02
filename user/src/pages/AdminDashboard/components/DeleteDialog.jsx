@@ -11,7 +11,9 @@ import { colors } from "../theme";
 export default function DeleteDialog({ open, onCancel, onConfirm }) {
   return (
     <Dialog open={open} onClose={onCancel} maxWidth="xs" fullWidth>
-      <DialogTitle sx={{ color: colors.text, fontWeight: 700 }}>Delete confession?</DialogTitle>
+      <DialogTitle sx={{ color: colors.text, fontWeight: 700 }}>
+        Delete confession?
+      </DialogTitle>
       <DialogContent>
         <DialogContentText sx={{ color: "#b5adbf", fontSize: "14px" }}>
           This permanently removes the confession. You can't undo this.

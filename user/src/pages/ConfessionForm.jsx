@@ -154,11 +154,12 @@ export default function ConfessionForm() {
         setSeconds(0);
         setError(
           serverMessage ||
-            "Your session expired. Please verify your email again."
+            "Your session expired. Please verify your email again.",
         );
       } else {
         setError(
-          serverMessage || "Unable to submit your confession. Please try again."
+          serverMessage ||
+            "Unable to submit your confession. Please try again.",
         );
       }
     } finally {
@@ -231,7 +232,6 @@ export default function ConfessionForm() {
               },
             }}
           >
-
             <Typography variant="h1" component="h1">
               Let it <span style={{ color: "#b69af5" }}>out.</span>
             </Typography>
@@ -388,7 +388,6 @@ export default function ConfessionForm() {
                 {error}
               </Box>
             )}
-
           </Card>
         </Box>
       </Box>

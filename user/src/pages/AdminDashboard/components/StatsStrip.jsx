@@ -4,7 +4,9 @@ import { colors } from "../theme";
 function Stat({ label, value, suffix = "" }) {
   return (
     <Box sx={{ px: { xs: 2, md: 3 }, py: 2, minWidth: 0 }}>
-      <Typography sx={{ color: colors.muted, fontSize: "12px", fontWeight: 500 }}>
+      <Typography
+        sx={{ color: colors.muted, fontSize: "12px", fontWeight: 500 }}
+      >
         {label}
       </Typography>
       <Typography
@@ -20,7 +22,10 @@ function Stat({ label, value, suffix = "" }) {
       >
         {value}
         {suffix && (
-          <Box component="span" sx={{ fontSize: "0.55em", color: colors.accentSoft, ml: 0.25 }}>
+          <Box
+            component="span"
+            sx={{ fontSize: "0.55em", color: colors.accentSoft, ml: 0.25 }}
+          >
             {suffix}
           </Box>
         )}
@@ -47,10 +52,17 @@ export default function StatsStrip({ stats }) {
         borderRadius: "18px",
         backgroundColor: "rgba(24, 19, 31, 0.92)",
         overflow: "hidden",
-        "& > *": { borderLeft: `1px solid ${colors.line}`, borderTop: `1px solid ${colors.line}` },
-        "& > :nth-of-type(-n+2)": { borderTop: { xs: "none", md: `1px solid ${colors.line}` } },
+        "& > *": {
+          borderLeft: `1px solid ${colors.line}`,
+          borderTop: `1px solid ${colors.line}`,
+        },
+        "& > :nth-of-type(-n+2)": {
+          borderTop: { xs: "none", md: `1px solid ${colors.line}` },
+        },
         "& > :nth-of-type(-n+4)": { borderTop: { md: "none" } },
-        "& > :nth-of-type(odd)": { borderLeft: { xs: "none", md: `1px solid ${colors.line}` } },
+        "& > :nth-of-type(odd)": {
+          borderLeft: { xs: "none", md: `1px solid ${colors.line}` },
+        },
         "& > :first-of-type": { borderLeft: "none" },
       }}
     >

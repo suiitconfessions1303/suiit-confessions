@@ -32,9 +32,14 @@ export default function VerificationPending() {
 
   return (
     <main className="page-shell">
-      <section className="confession-card verification-waiting" aria-live="polite">
+      <section
+        className="confession-card verification-waiting"
+        aria-live="polite"
+      >
         <p className="eyebrow">VERIFICATION PENDING</p>
-        <h1>We are waiting <span>for you.</span></h1>
+        <h1>
+          We are waiting <span>for you.</span>
+        </h1>
         <p className="description">
           Open the verification link we sent to your inbox. As soon as your
           email is confirmed, this page will open your confession form.
@@ -47,8 +52,8 @@ export default function VerificationPending() {
         </div>
 
         <p className="waiting-note">
-          Cannot find it? Check your spam or junk folder. The link expires in
-          5 minutes.
+          Cannot find it? Check your spam or junk folder. The link expires in 5
+          minutes.
         </p>
       </section>
     </main>

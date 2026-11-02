@@ -1,11 +1,9 @@
-
 .admin-page {
   min-height: 100vh;
   padding: 36px 20px;
   color: #f5f3ff;
   background:
-    radial-gradient(ellipse at top, #30204a 0%, transparent 55%),
-    #100d18;
+    radial-gradient(ellipse at top, #30204a 0%, transparent 55%), #100d18;
   font-family: Inter, system-ui, sans-serif;
 }
 

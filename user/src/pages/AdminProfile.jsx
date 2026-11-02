@@ -1,5 +1,13 @@
 import { useState } from "react";
-import { Box, Card, Chip, Divider, IconButton, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Card,
+  Chip,
+  Divider,
+  IconButton,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
@@ -12,7 +20,7 @@ import TopBar from "./AdminDashboard/components/TopBar";
 
 const ADMIN = {
   username: "confessions_admin",
-  password: import.meta.env.VITE_ADMIN_PASSWORD,
+  password: import.meta.env.VITE_ADMIN_PASSWORD || "",
 };
 
 function DetailRow({ label, children }) {
@@ -27,7 +35,9 @@ function DetailRow({ label, children }) {
         minHeight: 64,
       }}
     >
-      <Typography sx={{ color: colors.muted, fontSize: "13px", fontWeight: 500 }}>
+      <Typography
+        sx={{ color: colors.muted, fontSize: "13px", fontWeight: 500 }}
+      >
         {label}
       </Typography>
       <Box sx={{ minWidth: 0 }}>{children}</Box>
@@ -49,19 +59,26 @@ export default function AdminProfile() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Box sx={{ display: "flex", minHeight: "100vh", background: pageBackground }}>
+      <Box
+        sx={{ display: "flex", minHeight: "100vh", background: pageBackground }}
+      >
         <Sidebar onLogout={handleLogout} />
 
         <Box sx={{ flexGrow: 1, minWidth: 0 }}>
           <TopBar onLogout={handleLogout} />
 
-          <Box component="main" sx={{ p: { xs: 2, sm: 3, lg: 5 }, maxWidth: 760, mx: "auto" }}>
+          <Box
+            component="main"
+            sx={{ p: { xs: 2, sm: 3, lg: 5 }, maxWidth: 760, mx: "auto" }}
+          >
             <Stack spacing={3}>
               <Box>
                 <Typography variant="h1" component="h1">
                   My profile
                 </Typography>
-                <Typography sx={{ mt: 0.75, color: "#b5adbf", fontSize: "14px" }}>
+                <Typography
+                  sx={{ mt: 0.75, color: "#b5adbf", fontSize: "14px" }}
+                >
                   Manage your administrator account.
                 </Typography>
               </Box>
@@ -97,14 +114,17 @@ export default function AdminProfile() {
                       borderRadius: "50%",
                       objectFit: "cover",
                       backgroundColor: "#9b73ed",
-                      boxShadow: "0 12px 32px rgba(155, 115, 237, 0.35), 0 0 0 5px #18131f",
+                      boxShadow:
+                        "0 12px 32px rgba(155, 115, 237, 0.35), 0 0 0 5px #18131f",
                     }}
                   />
                   <Box sx={{ minWidth: 0 }}>
                     <Typography variant="h2" component="h2">
                       {ADMIN.username}
                     </Typography>
-                    <Typography sx={{ mt: 0.5, color: colors.muted, fontSize: "14px" }}>
+                    <Typography
+                      sx={{ mt: 0.5, color: colors.muted, fontSize: "14px" }}
+                    >
                       SUIIT Confessions
                     </Typography>
                     <Chip
@@ -126,7 +146,13 @@ export default function AdminProfile() {
                 {/* Account details */}
                 <Box sx={{ px: { xs: 2.5, sm: 4 }, py: 1 }}>
                   <DetailRow label="Username">
-                    <Typography sx={{ color: colors.text, fontSize: "15px", fontWeight: 600 }}>
+                    <Typography
+                      sx={{
+                        color: colors.text,
+                        fontSize: "15px",
+                        fontWeight: 600,
+                      }}
+                    >
                       {ADMIN.username}
                     </Typography>
                   </DetailRow>
@@ -134,7 +160,11 @@ export default function AdminProfile() {
                   <Divider sx={{ borderColor: colors.line }} />
 
                   <DetailRow label="Password">
-                    <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
+                    <Stack
+                      direction="row"
+                      spacing={1}
+                      sx={{ alignItems: "center" }}
+                    >
                       <Typography
                         sx={{
                           color: colors.text,
@@ -145,17 +175,26 @@ export default function AdminProfile() {
                           userSelect: showPassword ? "text" : "none",
                         }}
                       >
-                        {showPassword ? ADMIN.password : "•".repeat(ADMIN.password.length)}
+                        {showPassword
+                          ? ADMIN.password
+                          : "•".repeat(ADMIN.password.length)}
                       </Typography>
                       <IconButton
                         size="small"
                         onClick={() => setShowPassword((prev) => !prev)}
-                        aria-label={showPassword ? "Hide password" : "Show password"}
+                        aria-label={
+                          showPassword ? "Hide password" : "Show password"
+                        }
                         aria-pressed={showPassword}
                         sx={{
                           color: colors.muted,
-                          "&:hover": { color: colors.accentSoft, backgroundColor: "rgba(167, 139, 250, 0.1)" },
-                          "&:focus-visible": { outline: `2px solid ${colors.accent}` },
+                          "&:hover": {
+                            color: colors.accentSoft,
+                            backgroundColor: "rgba(167, 139, 250, 0.1)",
+                          },
+                          "&:focus-visible": {
+                            outline: `2px solid ${colors.accent}`,
+                          },
                         }}
                       >
                         {showPassword ? (

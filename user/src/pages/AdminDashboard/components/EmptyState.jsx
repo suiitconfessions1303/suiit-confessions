@@ -16,7 +16,9 @@ export default function EmptyState({ title, text, loading = false }) {
       }}
     >
       {loading && <CircularProgress size={26} thickness={4} sx={{ mb: 1 }} />}
-      <Typography sx={{ color: colors.text, fontSize: "16px", fontWeight: 700 }}>
+      <Typography
+        sx={{ color: colors.text, fontSize: "16px", fontWeight: 700 }}
+      >
         {title}
       </Typography>
       <Typography sx={{ color: colors.muted, fontSize: "13px", maxWidth: 300 }}>

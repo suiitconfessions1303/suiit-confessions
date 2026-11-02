@@ -47,7 +47,8 @@ function wrapText(ctx, text, maxWidth) {
         // Break very long words that don't fit on one line
         while (ctx.measureText(word).width > maxWidth) {
           let i = word.length;
-          while (i > 1 && ctx.measureText(word.slice(0, i)).width > maxWidth) i--;
+          while (i > 1 && ctx.measureText(word.slice(0, i)).width > maxWidth)
+            i--;
           lines.push(word.slice(0, i));
           word = word.slice(i);
         }
@@ -116,7 +117,10 @@ function paintCard(lines, stamp, index, total) {
 
 const toBlob = (canvas) =>
   new Promise((resolve, reject) =>
-    canvas.toBlob((b) => (b ? resolve(b) : reject(new Error("Export failed"))), "image/png"),
+    canvas.toBlob(
+      (b) => (b ? resolve(b) : reject(new Error("Export failed"))),
+      "image/png",
+    ),
   );
 
 function saveBlob(blob, filename) {

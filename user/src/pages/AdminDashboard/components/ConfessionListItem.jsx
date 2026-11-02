@@ -20,8 +20,14 @@ export default function ConfessionListItem({ item, number, onSelect }) {
         border: `1px solid ${colors.line}`,
         backgroundColor: "rgba(24, 19, 31, 0.92)",
         transition: "background-color 0.2s, border-color 0.2s",
-        "&:hover": { borderColor: colors.lineStrong, backgroundColor: "#1c1626" },
-        "&:focus-visible": { outline: `2px solid ${colors.accent}`, outlineOffset: 2 },
+        "&:hover": {
+          borderColor: colors.lineStrong,
+          backgroundColor: "#1c1626",
+        },
+        "&:focus-visible": {
+          outline: `2px solid ${colors.accent}`,
+          outlineOffset: 2,
+        },
       }}
     >
       {/* Header */}
