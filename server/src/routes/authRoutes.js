@@ -8,7 +8,8 @@ import { sendVerificationEmail } from "../services/emailService.js";
 
 const router = Router();
 
-const hashToken = (token) => createHash("sha256").update(token).digest("hex");
+const hashToken = (token) =>
+  createHash("sha256").update(token).digest("hex");
 
 const requestLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -73,11 +74,19 @@ router.post("/request-verification", requestLimiter, async (req, res) => {
 });
 
 router.get("/verify", async (req, res) => {
+  const frontendUrl = process.env.APP_URL.replace(/\/+$/, "");
+
+  // Send the user back to the start page with a reason. The frontend
+  // clears its "pending" state and shows the email form again.
+  const backToStart = (reason) =>
+    res.redirect(`${frontendUrl}/?verification=${reason}`);
+
   try {
-    const token = typeof req.query.token === "string" ? req.query.token : "";
+    const token =
+      typeof req.query.token === "string" ? req.query.token : "";
 
     if (!/^[a-f0-9]{64}$/.test(token)) {
-      return res.status(400).send("Invalid verification link.");
+      return backToStart("invalid");
     }
 
     // Atomically consume the verification token.
@@ -92,13 +101,13 @@ router.get("/verify", async (req, res) => {
       },
       {
         returnDocument: "after",
-      },
+      }
     );
 
     if (!verification) {
-      return res
-        .status(400)
-        .send("This verification link is invalid, expired, or already used.");
+      // Not found: expired (the TTL index may already have removed it),
+      // already used, or never existed.
+      return backToStart("expired");
     }
 
     const rawSessionToken = randomBytes(32).toString("hex");
@@ -118,17 +127,13 @@ router.get("/verify", async (req, res) => {
       path: "/",
     });
 
-    const frontendUrl = process.env.APP_URL.replace(/\/+$/, "");
-
     return res.redirect(
-      `${frontendUrl}/confess#session=${encodeURIComponent(rawSessionToken)}`,
+      `${frontendUrl}/confess#session=${encodeURIComponent(rawSessionToken)}`
     );
   } catch (error) {
     console.error("Email verification failed:", error.message);
 
-    return res
-      .status(500)
-      .send("Verification failed. Please request a new link.");
+    return backToStart("error");
   }
 });
 

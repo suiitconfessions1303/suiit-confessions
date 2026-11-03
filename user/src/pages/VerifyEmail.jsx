@@ -1,6 +1,7 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import api from "../api";
+import { startPending } from "../utils/verificationPending";
 import {
   Box,
   Card,
@@ -108,15 +109,42 @@ export default function VerifyEmail() {
   const [error, setError] = useState("");
   const [showNotice, setShowNotice] = useState(true);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Message shown when the user is sent back here after a failed/expired link.
+  const [notice, setNotice] = useState(() => {
+    const reason = new URLSearchParams(window.location.search).get(
+      "verification",
+    );
+
+    if (reason === "expired" || location.state?.expired) {
+      return "Your verification link expired. Please enter your email to get a new one.";
+    }
+    if (reason === "invalid") {
+      return "That verification link is invalid or was already used. Please request a new one.";
+    }
+    if (reason === "error") {
+      return "We couldn't verify your email. Please request a new link.";
+    }
+    return "";
+  });
+
+  // Remove ?verification=... from the address bar once it has been read.
+  useEffect(() => {
+    if (window.location.search.includes("verification=")) {
+      window.history.replaceState(null, "", window.location.pathname);
+    }
+  }, []);
 
   async function handleSubmit(e) {
     e.preventDefault();
     setError("");
+    setNotice("");
     setLoading(true);
 
     try {
       await api.post("/auth/request-verification", { email });
-      window.localStorage.setItem("verification_pending", "true");
+      startPending();
       navigate("/verification-pending", { replace: true });
     } catch (err) {
       setError(
@@ -243,6 +271,26 @@ export default function VerifyEmail() {
                 {loading ? "Sending link..." : "Send verification link"}
               </Button>
             </Box>
+
+            {notice && !error && (
+              <Box
+                role="status"
+                sx={{
+                  margin: "16px 0 0",
+                  padding: "12px",
+                  borderRadius: "10px",
+                  fontSize: "13px",
+                  lineHeight: 1.6,
+                  overflowWrap: "anywhere",
+                  border: "1px solid #55406b",
+                  backgroundColor: "#21182e",
+                  color: "#d9ccff",
+                  textAlign: "left",
+                }}
+              >
+                {notice}
+              </Box>
+            )}
 
             {error && (
               <Box

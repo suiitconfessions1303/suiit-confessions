@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import api from "../api";
+import { clearPending, isPending } from "../utils/verificationPending.js";
+
 
 import { Box, CircularProgress, Paper, Typography } from "@mui/material";
 
@@ -67,6 +69,7 @@ function RouteLoading() {
   );
 }
 
+
 export function SubmissionRoute({ children }) {
   const [allowed, setAllowed] = useState(null);
   const location = useLocation();
@@ -74,9 +77,7 @@ export function SubmissionRoute({ children }) {
 
   useEffect(() => {
     let active = true;
-    const handoffToken = new URLSearchParams(location.hash.slice(1)).get(
-      "session",
-    );
+    const handoffToken = new URLSearchParams(location.hash.slice(1)).get("session");
 
     const sessionCheck = handoffToken
       ? api.post("/confessions/session/activate", { token: handoffToken })
@@ -88,6 +89,9 @@ export function SubmissionRoute({ children }) {
 
         const sessionActive = response.data.active === true;
         setAllowed(sessionActive);
+
+        // Verified: the "waiting for email" state is finished.
+        if (sessionActive) clearPending();
 
         if (handoffToken && sessionActive) {
           navigate("/confess", { replace: true });
@@ -105,11 +109,7 @@ export function SubmissionRoute({ children }) {
     children
   ) : (
     <Navigate
-      to={
-        window.localStorage.getItem("verification_pending") === "true"
-          ? "/verification-pending"
-          : "/"
-      }
+      to={isPending() ? "/verification-pending" : "/"}
       replace
     />
   );
@@ -127,6 +127,12 @@ export function VerificationRoute({ children }) {
   useEffect(() => {
     let active = true;
 
+    // The backend redirects here with ?verification=expired|invalid|error
+    // when a link fails. Reset the pending state so the email form shows.
+    if (new URLSearchParams(window.location.search).has("verification")) {
+      clearPending();
+    }
+
     api
       .get("/confessions/session")
       .then(
@@ -141,7 +147,7 @@ export function VerificationRoute({ children }) {
 
   if (hasSession === null) return <RouteLoading />;
   if (hasSession) return <Navigate to="/confess" replace />;
-  return window.localStorage.getItem("verification_pending") === "true" ? (
+  return isPending() ? (
     <Navigate to="/verification-pending" replace />
   ) : (
     children
@@ -149,11 +155,7 @@ export function VerificationRoute({ children }) {
 }
 
 export function VerificationPendingRoute({ children }) {
-  return window.localStorage.getItem("verification_pending") === "true" ? (
-    children
-  ) : (
-    <Navigate to="/" replace />
-  );
+  return isPending() ? children : <Navigate to="/" replace />;
 }
 
 export function AdminRoute({ children }) {
@@ -198,8 +200,7 @@ export function AdminLoginRoute({ children }) {
 
 export function PendingNavigationGuard({ children }) {
   const location = useLocation();
-  const pending =
-    window.localStorage.getItem("verification_pending") === "true";
+  const pending = isPending();
   const allowedPaths = ["/verification-pending", "/confess"];
 
   if (pending && !allowedPaths.includes(location.pathname)) {
