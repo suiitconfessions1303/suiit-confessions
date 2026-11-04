@@ -89,6 +89,10 @@ const textareaSx = {
   fontFamily: "inherit",
   fontSize: "14px",
   lineHeight: 1.7,
+  // Fluid height: comfortable on tall screens, compact on short/landscape ones.
+  height: "clamp(130px, 28vh, 220px)",
+  // 16px stops iOS Safari from zooming the page when the field is focused.
+  "@media (max-width: 600px)": { fontSize: "16px" },
   outline: "none",
   transition: "border-color 0.2s, box-shadow 0.2s",
   "&::placeholder": { color: "#777080", opacity: 1 },
@@ -154,12 +158,11 @@ export default function ConfessionForm() {
         setSeconds(0);
         setError(
           serverMessage ||
-            "Your session expired. Please verify your email again.",
+            "Your session expired. Please verify your email again."
         );
       } else {
         setError(
-          serverMessage ||
-            "Unable to submit your confession. Please try again.",
+          serverMessage || "Unable to submit your confession. Please try again."
         );
       }
     } finally {
@@ -172,20 +175,27 @@ export default function ConfessionForm() {
       <Box
         sx={{
           minHeight: "100vh",
+          // dvh = the visible height on phones (excludes the browser's address bar)
+          "@supports (height: 100dvh)": { minHeight: "100dvh" },
           display: "grid",
           placeItems: "center",
           padding: "56px 18px 32px",
+          WebkitTextSizeAdjust: "100%",
           background:
             "radial-gradient(ellipse at 15% 10%, #302044 0%, transparent 40%), radial-gradient(ellipse at 90% 85%, #21152f 0%, transparent 40%), #0e0b13",
           "@media (max-width: 480px)": { padding: "56px 12px 18px" },
+          "@media (max-height: 520px) and (orientation: landscape)": {
+            padding: "52px 18px 18px",
+          },
         }}
       >
         {/* ---- Fixed-width container ---- */}
         <Box
           sx={{
             position: "relative",
-            width: 520,
-            maxWidth: "100%",
+            width: "100%",
+            maxWidth: 520,
+            "@media (min-width: 1200px)": { maxWidth: 560 },
           }}
         >
           {/* ---- Logo badge ---- */}
@@ -208,6 +218,7 @@ export default function ConfessionForm() {
                 display: "block",
                 width: 76,
                 height: 76,
+                "@media (max-width: 360px)": { width: 64, height: 64 },
                 borderRadius: "50%",
                 objectFit: "cover",
                 backgroundColor: "#9b73ed",
@@ -230,8 +241,14 @@ export default function ConfessionForm() {
                 padding: "26px 21px 20px",
                 borderRadius: "19px",
               },
+              "@media (max-width: 360px)": {
+                padding: "24px 16px 18px",
+                borderRadius: "16px",
+              },
+              "@media (min-width: 1200px)": { padding: "40px 36px 30px" },
             }}
           >
+
             <Typography variant="h1" component="h1">
               Let it <span style={{ color: "#b69af5" }}>out.</span>
             </Typography>
@@ -256,6 +273,8 @@ export default function ConfessionForm() {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
+                flexWrap: "wrap",
+                gap: "6px 12px",
                 marginBottom: "20px",
                 padding: "12px 16px",
                 border: "1px solid #49365f",
@@ -388,6 +407,7 @@ export default function ConfessionForm() {
                 {error}
               </Box>
             )}
+
           </Card>
         </Box>
       </Box>

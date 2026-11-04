@@ -55,6 +55,7 @@ function SuccessTick() {
       sx={{
         width: 84,
         height: 84,
+        "@media (max-width: 360px)": { width: 68, height: 68 },
         margin: "0 auto 22px",
         "@keyframes ringDraw": {
           from: { strokeDashoffset: 176 },
@@ -69,13 +70,17 @@ function SuccessTick() {
           "100%": { transform: "scale(1)", opacity: 1 },
         },
         animation: "popIn 0.4s ease-out both",
+        "@media (prefers-reduced-motion: reduce)": {
+          animation: "none",
+          "& *": { animation: "none !important" },
+        },
         filter: "drop-shadow(0 10px 28px rgba(155, 115, 237, 0.35))",
       }}
     >
       <svg
         viewBox="0 0 84 84"
-        width="84"
-        height="84"
+        width="100%"
+        height="100%"
         role="img"
         aria-label="Submitted successfully"
         fill="none"
@@ -122,18 +127,24 @@ export default function ThankYou() {
       <Box
         sx={{
           minHeight: "100vh",
+          // dvh = the visible height on phones (excludes the browser's address bar)
+          "@supports (height: 100dvh)": { minHeight: "100dvh" },
           display: "grid",
           placeItems: "center",
           padding: "32px 18px",
+          WebkitTextSizeAdjust: "100%",
           background:
             "radial-gradient(ellipse at 15% 10%, #302044 0%, transparent 40%), radial-gradient(ellipse at 90% 85%, #21152f 0%, transparent 40%), #0e0b13",
           "@media (max-width: 480px)": { padding: "18px 12px" },
+          "@media (max-height: 520px) and (orientation: landscape)": {
+            padding: "16px 18px",
+          },
         }}
       >
         <Card
           sx={{
-            width: 520,
-            maxWidth: "100%",
+            width: "100%",
+            maxWidth: 520,
             padding: "40px 30px 30px",
             border: "1px solid #352a40",
             borderRadius: "24px",
@@ -143,6 +154,14 @@ export default function ThankYou() {
             "@media (max-width: 480px)": {
               padding: "30px 21px 24px",
               borderRadius: "19px",
+            },
+            "@media (max-width: 360px)": {
+              padding: "26px 16px 20px",
+              borderRadius: "16px",
+            },
+            "@media (min-width: 1200px)": {
+              maxWidth: 560,
+              padding: "48px 36px 34px",
             },
           }}
         >
