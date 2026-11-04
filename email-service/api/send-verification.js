@@ -66,24 +66,44 @@ export default async function handler(req, res) {
       to: normalizedEmail,
       subject: "Verify your SUIIT Confessions email",
       text: [
-        "Verify your SUIIT student email using this link:",
+        "Hello,",
+        "",
+        "You requested email verification for SUIIT Confessions.",
+        "",
+        "Please verify your university email address using the link below:",
         verificationUrl,
         "",
         "This link expires in 5 minutes.",
-        "If you did not request this email, you can ignore it.",
+        "",
+        "If you did not request this verification, you can safely ignore this email.",
+        "",
+        "Regards,",
+        "SUIIT Confessions Team",
       ].join("\n"),
       html: `
-        <div style="font-family:Arial,sans-serif;max-width:520px;margin:auto;padding:24px">
-          <h2>SUIIT Confessions</h2>
-          <p>Verify your student email to continue.</p>
+      <div style="font-family:Arial,sans-serif;max-width:520px;margin:auto;padding:24px;color:#222;line-height:1.6">
+        <p>Hello,</p>
+
+        <p>You requested email verification for SUIIT Confessions.</p>
+
+        <p>Please verify your university email address using the button below:</p>
+
+        <p style="margin:24px 0">
           <a href="${verificationUrl}"
-             style="display:inline-block;background:#6d28d9;color:#fff;padding:12px 20px;text-decoration:none;border-radius:8px">
-            Verify Email
+             style="display:inline-block;background:#6d28d9;color:#ffffff;padding:12px 20px;text-decoration:none;border-radius:8px;font-weight:bold">
+            Verify Email Address
           </a>
-          <p>This link expires in 5 minutes.</p>
-          <p>If you did not request this email, you can safely ignore it.</p>
-        </div>
-      `,
+        </p>
+
+        <p>This link expires in 5 minutes.</p>
+
+        <p>If you did not request this verification,<br />
+        you can safely ignore this email.</p>
+
+        <p>Regards,<br />
+        SUIIT Confessions Team</p>
+      </div>
+    `,
     });
 
     return res.status(200).json({ message: "Verification email sent." });
