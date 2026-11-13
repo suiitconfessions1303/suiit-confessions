@@ -1,5 +1,5 @@
 import { Box, Button, Stack, Typography } from "@mui/material";
-import Logo from "../../../assets/favicon.png";
+import Logo from "../../../assets/logo.webp";
 import { colors } from "../theme";
 import LogoutIcon from "@mui/icons-material/Logout";
 

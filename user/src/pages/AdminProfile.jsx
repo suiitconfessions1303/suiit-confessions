@@ -13,7 +13,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { useNavigate } from "react-router-dom";
 import api from "../api";
-import Logo from "../assets/favicon.png";
+import Logo from "../assets/logo.webp";
 import theme, { colors, pageBackground } from "./AdminDashboard/theme";
 import Sidebar from "./AdminDashboard/components/Sidebar";
 import TopBar from "./AdminDashboard/components/TopBar";

@@ -2,7 +2,7 @@ import MailIcon from "@mui/icons-material/Mail";
 import PersonIcon from "@mui/icons-material/Person";
 import { Box, Button, Stack, Typography } from "@mui/material";
 import { NavLink } from "react-router-dom";
-import Logo from "../../../assets/favicon.png";
+import Logo from "../../../assets/logo.webp";
 import { colors } from "../theme";
 
 export const SIDEBAR_WIDTH = 248;

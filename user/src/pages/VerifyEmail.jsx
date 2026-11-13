@@ -13,7 +13,7 @@ import {
   Backdrop,
 } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import Logo from "../assets/SUIIT Confession Campus Badge.png";
+import Logo from "../assets/campus-badge.webp";
 
 const theme = createTheme({
   typography: {

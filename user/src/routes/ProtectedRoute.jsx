@@ -90,7 +90,7 @@ function RouteError({ onRetry }) {
   );
 }
 
-function RouteLoading() {
+export function RouteLoading() {
   const [slow, setSlow] = useState(false);
 
   useEffect(() => {
@@ -236,8 +236,7 @@ export function ThankYouRoute({ children }) {
 }
 
 export function VerificationRoute({ children }) {
-  const [hasSession, setHasSession] = useState(null); // null | true | false | "error"
-  const [retryKey, setRetryKey] = useState(0);
+  const [hasSession, setHasSession] = useState(false);
 
   useEffect(() => {
     let active = true;
@@ -249,32 +248,30 @@ export function VerificationRoute({ children }) {
       clearPending();
     }
 
-    withRetry(
-      (signal) => api.get("/confessions/session", { signal }),
-      controller.signal,
-    )
-      .then(
-        (response) => active && setHasSession(response.data.active === true),
-      )
-      .catch(() => active && setHasSession("error"));
+    // Do not block the public email form while a sleeping server wakes up.
+    // The confession route still performs a blocking check before showing
+    // protected content.
+    api
+      .get("/confessions/session", {
+        signal: controller.signal,
+        timeout: 5000,
+      })
+      .then((response) => {
+        if (active && response.data.active === true) {
+          setHasSession(true);
+        }
+      })
+      .catch(() => {
+        // An unavailable server does not prevent requesting a verification
+        // email; the submit request reports any connection problem.
+      });
 
     return () => {
       active = false;
       controller.abort();
     };
-  }, [retryKey]);
+  }, []);
 
-  if (hasSession === null) return <RouteLoading />;
-  if (hasSession === "error") {
-    return (
-      <RouteError
-        onRetry={() => {
-          setHasSession(null);
-          setRetryKey((key) => key + 1);
-        }}
-      />
-    );
-  }
   if (hasSession) return <Navigate to="/confess" replace />;
   return isPending() ? (
     <Navigate to="/verification-pending" replace />

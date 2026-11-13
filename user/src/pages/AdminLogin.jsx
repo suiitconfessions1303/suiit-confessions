@@ -12,7 +12,7 @@ import {
   Typography,
 } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import Logo from "../assets/favicon.png";
+import Logo from "../assets/logo.webp";
 
 /* ------------------------------------------------------------------ */
 /*  Theme                                                              */

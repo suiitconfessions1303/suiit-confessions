@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import api from "../api";
 import { Box, Card, Typography, Button } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import Logo from "../assets/favicon.png";
+import Logo from "../assets/logo.webp";
 
 /* ------------------------------------------------------------------ */
 /*  Constants                                                          */
